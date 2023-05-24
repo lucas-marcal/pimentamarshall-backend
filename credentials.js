@@ -1,4 +1,4 @@
-require("dotenv").config({path: "../.env.producao"})
+require("dotenv").config({path: "./.env.producao"})
 
 module.exports = {
 	// PRODUÇÃO = false

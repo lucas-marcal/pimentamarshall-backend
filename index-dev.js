@@ -1,4 +1,4 @@
-require("dotenv").config({path: "../.env.producao"})
+require("dotenv").config({path: "./.env.producao"})
 const app = require('./app')
 
 app.listen(3001, (err) => {
