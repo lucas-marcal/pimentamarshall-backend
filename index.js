@@ -5,9 +5,9 @@ const https = require("https")
 const fs = require("fs")
 
 const options = {
-    key: fs.readFileSync("/etc/letsencrypt/live/api-pagamentos.pimentamarshall.com.br/fullchain.pem"),
-    cert: fs.readFileSync("/etc/letsencrypt/live/api-pagamentos.pimentamarshall.com.br/privkey.pem"),
-    ca: fs.readFileSync("./ca-gerencianet.crt"),
+    key: fs.readFileSync("/etc/letsencrypt/live/api-pagamentos.pimentamarshall.com.br/privkey.pem"),
+    cert: fs.readFileSync("/etc/letsencrypt/live/api-pagamentos.pimentamarshall.com.br/fullchain.pem"),
+    ca: fs.readFileSync("./chain-pix-prod.crt"),
     minVersion: "TLSv1.2",
     requestCert: true,
     rejectUnauthorized: false
