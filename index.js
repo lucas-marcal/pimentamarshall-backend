@@ -1,5 +1,3 @@
-const express = require("express")
-const cors = require("cors")
 const { createNewPix } = require("./pixCreateImmediateCharge")
 const app = require('./app')
 
