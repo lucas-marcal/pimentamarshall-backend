@@ -1,4 +1,3 @@
-const { createNewPix } = require("./pixCreateImmediateCharge")
 const app = require('./app')
 const pixConfigWebhook = require("./pixConfigWebhook")
 
