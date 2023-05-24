@@ -1,5 +1,6 @@
 const { createNewPix } = require("./pixCreateImmediateCharge")
 const app = require('./app')
+const pixConfigWebhook = require("./pixConfigWebhook")
 
 const https = require("https")
 const fs = require("fs")
@@ -14,4 +15,10 @@ const options = {
 }
 
 const server = https.createServer(options, app)
-server.listen(443)
+server.listen(443, () => {
+    console.log("server running...")
+    console.log("creating webhook for pix...")
+    pixConfigWebhook().then(() => {
+        console.log("webhook created.")
+    })
+})
