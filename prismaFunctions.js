@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 async function pixUpdateOrderStatus(txid) {
   try {
     await prisma.shopOrder
-      .update({
+      .updateMany({
         where: { txid: txid },
         data: { status: "PROCESSING" },
       })
