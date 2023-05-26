@@ -9,7 +9,7 @@ const pixCreateImmediateCharge = async (order) => {
       expiracao: 3600,
     },
     valor: {
-      original: "0.01",
+      original: order.orderTotal.toFixed(2),
     },
     chave: process.env.CHAVE_PIX,
     infoAdicionais: [
