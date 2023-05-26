@@ -53,7 +53,9 @@ const createNewPix = async(order) => {
 	const newPixData = await pixCreateImmediateCharge(order);
 	const newPixQRCode = await pixGenerateQRCode(newPixData.loc.id);
 
-	return newPixQRCode
+  const data = {...newPixQRCode, txid: newPixData.txid};
+
+	return data
 }
 
 module.exports = {

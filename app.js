@@ -12,8 +12,8 @@ app.get("/", (req, res) => {
   res.send({ ok: true });
 });
 app.post("/create-order", async (req, res) => {
-  const { qrcode, imagemQrcode } = await createNewPix(req.body);
-  res.send({ ok: 1, qrcode, imagemQrcode });
+  const { qrcode, imagemQrcode, txid } = await createNewPix(req.body);
+  res.send({ ok: 1, qrcode, imagemQrcode, txid });
 });
 
 app.post("/webhook*", async (req, res) => {
