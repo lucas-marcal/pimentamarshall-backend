@@ -25,8 +25,8 @@ app.post("/create-one-step-link", async (req, res) => {
 
 app.post("/recebimento", async (req, res) => {
   console.log("Card or Billet received.");
-  console.log(req.body);
-  res.send({ ok: 1 });
+  const {charge_id, payment_url} = req.body;
+  res.send({ ok: 1, charge_id, payment_url });
 });
 
 app.post("/webhook*", async (req, res) => {
