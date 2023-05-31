@@ -26,10 +26,10 @@ const createOneStepLink = async (order) => {
 			payment_method: 'all',
 		},
 		items: order.items,
-		shippings: {
+		shippings: [{
 			name: order.shipping.type,
 			value: order.shipping.price,
-		},
+		}],
 		metadata: {
 			custom_id: order.id,
 			notification_url: "https://api-pagamentos.pimentamarshall.com.br/recebimento"
