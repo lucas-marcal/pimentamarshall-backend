@@ -19,14 +19,14 @@ app.post("/create-order", async (req, res) => {
 });
 
 app.post("/create-one-step-link", async (req, res) => {
-  const data = await createOneStepLink(req.body);
-  res.send({ ok: 1, data });
+  const result = await createOneStepLink(req.body);
+  res.send({ status: result.code, payment_url: result.data.payment_url, charge_id: result.data.charge_id });
 });
 
 app.post("/recebimento", async (req, res) => {
   console.log("Card or Billet received.");
-  const {charge_id, payment_url} = req.body;
-  res.send({ ok: 1, charge_id, payment_url });
+  console.log(req.body);
+  res.send({ ok: 1 });
 });
 
 app.post("/webhook*", async (req, res) => {
