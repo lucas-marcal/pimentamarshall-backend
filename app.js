@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const { createNewPix } = require("./pixCreateImmediateCharge");
 const { pixUpdateOrderStatus } = require("./prismaFunctions");
+const createOneStepLink = require("./createOneStepLink");
 
 const app = express();
 
@@ -11,9 +12,15 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send({ ok: true });
 });
+
 app.post("/create-order", async (req, res) => {
   const { qrcode, imagemQrcode, txid } = await createNewPix(req.body);
   res.send({ ok: 1, qrcode, imagemQrcode, txid });
+});
+
+app.post("/create-one-step-link", async (req, res) => {
+  const data = await createOneStepLink(req.body);
+  res.send({ ok: 1, data });
 });
 
 app.post("/webhook*", async (req, res) => {
