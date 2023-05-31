@@ -38,7 +38,7 @@ const createOneStepLink = async (order) => {
 	
 	const gerencianet = new Gerencianet(options)
 	
-	await gerencianet.createOneStepLink(params, body)
+	const resposta = await gerencianet.createOneStepLink(params, body)
 		.then((resposta) => {
 			console.log(resposta)
 			return resposta
@@ -47,6 +47,8 @@ const createOneStepLink = async (order) => {
 			console.log(error)
 			return error
 		})
+	
+	return resposta
 }
 
 module.exports = createOneStepLink
