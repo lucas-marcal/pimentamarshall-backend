@@ -23,6 +23,12 @@ app.post("/create-one-step-link", async (req, res) => {
   res.send({ ok: 1, data });
 });
 
+app.post("/recebimento", async (req, res) => {
+  console.log("Card or Billet received.");
+  console.log(req.body);
+  res.send({ ok: 1 });
+});
+
 app.post("/webhook*", async (req, res) => {
   console.log("webhook received.");
   const { pix } = req.body;
