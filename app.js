@@ -21,7 +21,7 @@ app.post("/create-order", async (req, res) => {
 app.post("/create-one-step-link", async (req, res) => {
   const result = await createOneStepLink(req.body);
   console.log(result);
-  res.send({ ok: 1, data });
+  res.send({ ok: 1 });
 });
 
 app.post("/recebimento", async (req, res) => {
