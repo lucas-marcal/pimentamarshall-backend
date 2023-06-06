@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const { createNewPix } = require("./pixCreateImmediateCharge");
-const { pixUpdateOrderStatus } = require("./prismaFunctions");
+const { pixUpdateOrderStatus, getOrderByTxid } = require("./prismaFunctions");
 const createOneStepLink = require("./createOneStepLink");
+const { sendPixConfirmation } = require("./sendOrderReceipt");
 
 const app = express();
 
@@ -41,6 +42,8 @@ app.post("/webhook*", async (req, res) => {
   if (pix) {
     console.log(pix)
     await pixUpdateOrderStatus(pix[0].txid)
+    const { clientEmail, clientName } = await getOrderByTxid(pix[0].txid)
+    await sendPixConfirmation(clientEmail)
   }
   res.send({ ok: 1 });
 });

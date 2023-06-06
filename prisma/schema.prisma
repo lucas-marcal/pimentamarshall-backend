@@ -96,7 +96,7 @@ model Session {
 model ShippingMethod {
   id        String      @id
   name      String
-  price     Float?
+  price     Float
   ShopOrder ShopOrder[]
 }
 
@@ -107,9 +107,15 @@ model ShopOrder {
   createdAt        DateTime       @default(now())
   updatedAt        DateTime
   addressId        String
-  paymentMethod    PaymentMethod
   shippingMethodId String
   txid             String?
+  clientLastName   String
+  clientName       String
+  hasLobby         Boolean
+  paymentMethod    String
+  deliveryTime     DateTime?
+  clientEmail      String
+  clientTel        String?
   OrderItem        OrderItem[]
   Address          Address        @relation(fields: [addressId], references: [id])
   ShippingMethod   ShippingMethod @relation(fields: [shippingMethodId], references: [id])
@@ -143,11 +149,6 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-enum PaymentMethod {
-  PIX
-  PAGSEGURO
 }
 
 enum PaymentStatus {

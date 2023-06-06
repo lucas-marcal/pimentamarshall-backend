@@ -21,6 +21,25 @@ async function pixUpdateOrderStatus(txid) {
   }
 }
 
-module.exports = {
-    pixUpdateOrderStatus,
+async function getOrderByTxid(txid) {
+  try {
+    const order = await prisma.shopOrder.findFirst({
+      where: { txid: txid },
+    });
+
+    await prisma.$disconnect();
+
+    return order;
+  } catch (error) {
+    console.error(error);
+
+    await prisma.$disconnect();
+
+    process.exit(1);
+  }
 }
+
+module.exports = {
+  pixUpdateOrderStatus,
+  getOrderByTxid,
+};
