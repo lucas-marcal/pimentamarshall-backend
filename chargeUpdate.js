@@ -28,7 +28,7 @@ async function getChargeUpdate(notification) {
 async function updateOrderStatusByToken(notification) {
   const resposta = await getChargeUpdate(notification);
   resposta.data.map(async (item) => {
-    if (item.status.current === "link") {
+    if (item.status.current === "paid") {
       try {
         await paymentLinkUpdateOrderStatus(item.custom_id);
         const { clientEmail } = await getOrderById(item.custom_id);
