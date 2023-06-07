@@ -4,6 +4,7 @@ const {
   paymentLinkUpdateOrderStatus,
   getOrderById,
 } = require("./prismaFunctions");
+const { sendPixConfirmation } = require("./sendOrderReceipt");
 
 async function getChargeUpdate(notification) {
   let params = {
