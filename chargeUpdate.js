@@ -1,5 +1,6 @@
 const Gerencianet = require("gn-api-sdk-node");
 const options = require("./credentials");
+const { paymentLinkUpdateOrderStatus } = require("./prismaFunctions");
 
 async function getChargeUpdate(notification) {
   let params = {
@@ -20,12 +21,20 @@ async function getChargeUpdate(notification) {
   return resposta
 }
 
-async function getChargeStatus(notification) {
+async function updateOrderStatusByToken(notification) {
   const resposta = await getChargeUpdate(notification);
-  resposta.data.map((item) => console.log(item.status))
+  resposta.data.map(async (item) => {
+    if (item.status.current === "link") {
+      try {
+        await paymentLinkUpdateOrderStatus(item.custom_id)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  })
 }
 
 module.exports = {
   getChargeUpdate,
-  getChargeStatus,
+  updateOrderStatusByToken,
 }

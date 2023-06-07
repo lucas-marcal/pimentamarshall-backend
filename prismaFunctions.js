@@ -21,6 +21,25 @@ async function pixUpdateOrderStatus(txid) {
   }
 }
 
+async function paymentLinkUpdateOrderStatus(customId) {
+  try {
+    await prisma.shopOrder
+      .update({
+        where: { id: customId },
+        data: { status: "PROCESSING" },
+      })
+      .then(async () => {
+        await prisma.$disconnect();
+      });
+  } catch (error) {
+    console.error(error);
+
+    await prisma.$disconnect();
+
+    process.exit(1);
+  }
+}
+
 async function getOrderByTxid(txid) {
   try {
     const order = await prisma.shopOrder.findFirst({
@@ -42,4 +61,5 @@ async function getOrderByTxid(txid) {
 module.exports = {
   pixUpdateOrderStatus,
   getOrderByTxid,
+  paymentLinkUpdateOrderStatus,
 };
