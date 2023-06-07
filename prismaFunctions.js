@@ -58,8 +58,27 @@ async function getOrderByTxid(txid) {
   }
 }
 
+async function getOrderById(id) {
+  try {
+    const order = await prisma.shopOrder.findUnique({
+      where: { id: id },
+    });
+
+    await prisma.$disconnect();
+
+    return order;
+  } catch (error) {
+    console.error(error);
+
+    await prisma.$disconnect();
+
+    process.exit(1);
+  }
+}
+
 module.exports = {
   pixUpdateOrderStatus,
   getOrderByTxid,
   paymentLinkUpdateOrderStatus,
+  getOrderById,
 };
