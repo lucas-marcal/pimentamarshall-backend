@@ -17,9 +17,15 @@ async function getChargeUpdate(notification) {
       console.log(error);
     });
 
-  console.log(resposta);
+  return resposta
+}
+
+async function getChargeStatus(notification) {
+  const resposta = await getChargeUpdate(notification);
+  resposta.data.map((item) => console.log(item.status))
 }
 
 module.exports = {
   getChargeUpdate,
+  getChargeStatus,
 }

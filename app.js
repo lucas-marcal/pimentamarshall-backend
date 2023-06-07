@@ -4,7 +4,7 @@ const { createNewPix } = require("./pixCreateImmediateCharge");
 const { pixUpdateOrderStatus, getOrderByTxid } = require("./prismaFunctions");
 const createOneStepLink = require("./createOneStepLink");
 const { sendPixConfirmation } = require("./sendOrderReceipt");
-const { getChargeUpdate } = require("./chargeUpdate");
+const { getChargeUpdate, getChargeStatus } = require("./chargeUpdate");
 
 const app = express();
 
@@ -30,9 +30,8 @@ app.post("/create-one-step-link", async (req, res) => {
 
 app.post("/recebimento", async (req, res) => {
   console.log("Card or Billet update received.");
-  console.log(req.body);
   const { notification } = req.body;
-  await getChargeUpdate(notification);
+  await getChargeStatus(notification);
   res.send({ ok: 1 });
 });
 
