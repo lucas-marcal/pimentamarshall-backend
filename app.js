@@ -27,7 +27,7 @@ app.post("/create-one-step-link", async (req, res) => {
 });
 
 app.post("/recebimento", async (req, res) => {
-  console.log("Card or Billet received.");
+  console.log("Card or Billet update received.");
   console.log(req.body);
   res.send({ ok: 1 });
 });

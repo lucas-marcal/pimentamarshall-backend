@@ -32,7 +32,7 @@ const createOneStepLink = async (order) => {
 		}],
 		metadata: {
 			custom_id: order.id,
-			notification_url: "https://api-pagamentos.pimentamarshall.com.br/recebimento"
+			notification_url: "http://api.webhookinbox.com/i/YyAAnAJt/in/"
 		},
 	}
 	
