@@ -10,7 +10,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true, limit: '1mb'}))
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
 app.get("/", (req, res) => {
   res.send({ ok: true });
@@ -43,24 +43,12 @@ app.post("/webhook*", async (req, res) => {
   }
 
   if (pix) {
-    console.log(pix)
-    await pixUpdateOrderStatus(pix[0].txid)
-    const { clientEmail, clientName } = await getOrderByTxid(pix[0].txid)
-    await sendPixConfirmation(clientEmail)
+    console.log(pix);
+    await pixUpdateOrderStatus(pix[0].txid);
+    const { clientEmail, clientName } = await getOrderByTxid(pix[0].txid);
+    await sendPixConfirmation(clientEmail);
   }
   res.send({ ok: 1 });
 });
-
-// {
-//   pix: [
-//     {
-//       endToEndId: "E00416968202305241352lsYWO1u5oPw",
-//       txid: "e571c7ed915d45de92a35257f8b48c13",
-//       chave: "f6518e9e-a21b-426f-9596-b000c7dbf9ab",
-//       valor: "0.03",
-//       horario: "2023-05-24T13:52:36.000Z",
-//     },
-//   ];
-// }
 
 module.exports = app;
