@@ -1,81 +1,15 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
 generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model Account {
-  id                String  @id
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-  User              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Address {
-  id         String      @id
-  address1   String
-  number     Int
-  complement String?
-  bairro     String?
-  city       String
-  region     String
-  userId     String?     @unique
-  zipCode    String
-  User       User?       @relation(fields: [userId], references: [id])
-  ShopOrder  ShopOrder[]
-}
-
-model CartItem {
-  id                String          @id
-  shoppingSessionId String
-  quantity          Int
-  productId         String
-  Product           Product         @relation(fields: [productId], references: [id])
-  ShoppingSession   ShoppingSession @relation(fields: [shoppingSessionId], references: [id])
-}
-
-model OrderItem {
-  id          String    @id
-  shopOrderId String
-  productId   String
-  quantity    Int
-  value       Float
-  Product     Product   @relation(fields: [productId], references: [id])
-  ShopOrder   ShopOrder @relation(fields: [shopOrderId], references: [id])
-}
-
-model Product {
-  id          String      @id
-  name        String
-  image       String
-  description String
-  price       Float
-  salePrice   Float?
-  stock       Int
-  isActive    Boolean
-  picancia    Int?
-  orderOnPage Int         @default(999)
-  urlSlug     String      @unique
-  CartItem    CartItem[]
-  OrderItem   OrderItem[]
-}
-
 model Reseller {
-  id              String  @id
+  id              String  @id @default(cuid())
   name            String
   storeType       String?
   address         String
@@ -85,61 +19,141 @@ model Reseller {
   orderOnPage     Int     @default(999)
 }
 
-model Session {
-  id           String   @id
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  User         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  image       String
+  description String
+  price       Float
+  salePrice   Float?
+  stock       Int
+  picancia    Int?
+  isActive    Boolean
+  CartItem    CartItem[]
+  OrderItem   OrderItem[]
+  orderOnPage Int         @default(999)
+  urlSlug     String      @unique
+}
+
+model Address {
+  id         String      @id @default(cuid())
+  address1   String
+  number     Int
+  complement String?
+  bairro     String?
+  city       String
+  region     String
+  zipCode    String
+  user       User?       @relation(fields: [userId], references: [id])
+  userId     String?     @unique
+  shopOrder  ShopOrder[]
+}
+
+model ShopOrder {
+  id               String         @id @default(cuid())
+  status           PaymentStatus
+  totalValue       Float
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  shippingAddress  Address        @relation(fields: [addressId], references: [id])
+  addressId        String
+  paymentMethod    String
+  shippingMethod   ShippingMethod @relation(fields: [shippingMethodId], references: [id])
+  shippingMethodId String
+  deliveryTime     DateTime?
+  hasLobby         Boolean
+  items            OrderItem[]
+  txid             String?
+  clientName       String
+  clientLastName   String
+  clientEmail      String
+  clientTel        String?
+}
+
+model ShoppingSession {
+  id        String     @id @default(cuid())
+  user      User       @relation(fields: [userId], references: [id])
+  userId    String     @unique
+  total     Float      @default(0)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  CartItem  CartItem[]
+}
+
+model CartItem {
+  id                String          @id @default(cuid())
+  shoppingSession   ShoppingSession @relation(fields: [shoppingSessionId], references: [id])
+  shoppingSessionId String
+  product           Product         @relation(fields: [productId], references: [id])
+  quantity          Int
+  productId         String
+}
+
+model OrderItem {
+  id            String    @id @default(cuid())
+  shoppingOrder ShopOrder @relation(fields: [shopOrderId], references: [id])
+  item          Product   @relation(fields: [productId], references: [id])
+  shopOrderId   String
+  productId     String
+  quantity      Int
+  value         Float
 }
 
 model ShippingMethod {
-  id        String      @id
+  id        String      @id @default(cuid())
   name      String
   price     Float
   ShopOrder ShopOrder[]
 }
 
-model ShopOrder {
-  id               String         @id
-  status           PaymentStatus
-  totalValue       Float
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime
-  addressId        String
-  shippingMethodId String
-  txid             String?
-  clientLastName   String
-  clientName       String
-  hasLobby         Boolean
-  paymentMethod    String
-  deliveryTime     DateTime?
-  clientEmail      String
-  clientTel        String?
-  OrderItem        OrderItem[]
-  Address          Address        @relation(fields: [addressId], references: [id])
-  ShippingMethod   ShippingMethod @relation(fields: [shippingMethodId], references: [id])
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  DELIVERED
 }
 
-model ShoppingSession {
-  id        String     @id
-  userId    String     @unique
-  total     Float      @default(0)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime
-  CartItem  CartItem[]
-  User      User       @relation(fields: [userId], references: [id])
+enum UserRole {
+  ADMIN
+  USER
+}
+
+// Necessary for Next auth
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id              String           @id
+  id              String           @id @default(cuid())
   name            String?
   email           String?          @unique
   emailVerified   DateTime?
   image           String?
-  Account         Account[]
+  role            UserRole         @default(USER)
+  accounts        Account[]
+  sessions        Session[]
   Address         Address?
-  Session         Session[]
   ShoppingSession ShoppingSession?
 }
 
@@ -149,10 +163,4 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
-}
-
-enum PaymentStatus {
-  PENDING
-  PROCESSING
-  DELIVERED
 }
