@@ -37,7 +37,6 @@ app.post("/recebimento", async (req, res) => {
 
 app.post("/webhook*", async (req, res) => {
   console.log("webhook received.");
-  console.log(req.body);
   const { pix } = req.body;
   if (!req.socket.authorized) {
     return res.status(401).send("Invalid client certificate.");
