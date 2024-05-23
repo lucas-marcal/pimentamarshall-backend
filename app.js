@@ -48,8 +48,7 @@ app.post("/webhook*", async (req, res) => {
 
   if (pix) {
     console.log(pix);
-    // await sendPurchaseConfirmation();
-    await dbtestFunc();
+    await sendPurchaseConfirmation();
     await pixUpdateOrderStatus(pix[0].txid);
     const { clientEmail, clientName } = await getOrderByTxid(pix[0].txid);
     await sendPixConfirmation(clientEmail);
