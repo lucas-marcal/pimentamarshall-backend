@@ -5,6 +5,27 @@ require("dotenv").config({ path: "./.env.producao" });
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+async function sendPurchaseConfirmation() {
+  const msg_store = {
+    to: "contato@pimentamarshall.com.br",
+    from: {
+      email: "vendas@pimentamarshall.com.br",
+      name: "Vendas Marshall",
+    },
+    templateId: "d-acce61474fd94d6e8edfd5edcf4e06dd",
+    dynamicTemplateData: {},
+  };
+
+  sgMail
+    .send(msg_store)
+    .then(() => {
+      console.log("Email sent to store.");
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}
+
 async function sendPixConfirmation(clientEmail) {
   const msg_client = {
     to: clientEmail,
@@ -47,4 +68,5 @@ async function sendPixConfirmation(clientEmail) {
 
 module.exports = {
   sendPixConfirmation,
+  sendPurchaseConfirmation,
 };
