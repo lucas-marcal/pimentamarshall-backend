@@ -17,4 +17,6 @@ async function getAllProducts() {
   }
 }
 
-console.log(getAllProducts());
+getAllProducts().then((products) => {
+  console.log(products);
+});
