@@ -2,21 +2,17 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-async function getAllProducts() {
-  try {
-    const products = await prisma.product.findMany().then(async () => {
-      await prisma.$disconnect();
-    });
-    return products;
-  } catch (error) {
-    console.error(error);
-
-    await prisma.$disconnect();
-
-    process.exit(1);
-  }
+async function main() {
+  const products = await prisma.product.findMany();
+  console.log(`${JSON.stringify(products)} < veio do main`);
 }
 
-getAllProducts().then((products) => {
-  console.log(products);
-});
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
