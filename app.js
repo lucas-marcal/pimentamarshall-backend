@@ -12,7 +12,13 @@ const { dbtestFunc } = require("./dbtest");
 
 const app = express();
 
-app.use(cors());
+const corsOptions = {
+  origin: "https://pimentamarshall.com.br",
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "1mb" }));
 
